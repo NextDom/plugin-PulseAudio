@@ -1,0 +1,11 @@
+{
+"id" : "pulseaudio",
+"name" : "Pulseaudio",
+"licence" : "AGPL",
+"author" : "Slobberbone",
+"require" : "2.2.5",
+"category" : "multimedia",
+"hasDependency" : true,
+"hasOwnDeamon" : false,
+"maxDependancyInstallTime" : 45
+}

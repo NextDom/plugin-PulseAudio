@@ -1,0 +1,36 @@
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides: pulseaudio-speaker-service-@@name@@
+# Required-Start: $local_fs $syslog $remote_fs
+# Required-Stop: $local_fs $syslog $remote_fs
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: speaker Daemon for @@name@@
+# Description: Generate Snapshot for Jeedom Camera
+### END INIT INFO
+
+case "$1" in
+    start)
+	    complement=$(echo "@@url@@" | sed 's/[&]/\\&/g')
+            echo "Starting pulseaudio-speaker Daemon for @@name@@..."
+            bluetooth-connect.sh @@port@@ @@address@@
+            echo $! > /run/pulseaudio-speaker-@@name@@.pid
+            ;;
+    stop)
+            echo "Stopping pulseaudio-speaker Daemon for @@name@@..."
+            #pkill -f speaker.sh
+            kill -9 `cat /run/pulseaudio-speaker-@@name@@.pid`
+            bluetooth-disconnect.sh @@port@@ @@address@@
+            rm /run/pulseaudio-speaker-@@name@@.pid
+            ;;
+    restart)
+            $0 stop
+            sleep 1
+            $0 start
+            ;;
+    *)
+            echo "Usage: $0 {start|stop|restart}"
+            exit 1
+            ;;
+esac
