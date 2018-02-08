@@ -19,47 +19,56 @@
 try {
     require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
-
+    
     if (!isConnect('admin')) {
-        throw new Exception(__('401 - Accès non autorisé', __FILE__));
+        throw new \Exception(__('401 - Accès non autorisé', __FILE__));
     }
-    if (init('action') == 'updatepulseaudio') {
-    	pulseaudio::updatepulseaudio();
-        ajax::success();
+    
+    switch(init('action')){
+    
+        case 'updatepulseaudio':
+            pulseaudio::updatepulseaudio();
+            ajax::success();
+       break;
+       
+        case 'statuspulseaudio':
+            pulseaudio::statuspulseaudio(init('serviceName'));
+            ajax::success();
+       break;
+       
+       case 'logpulseaudio':
+            pulseaudio::logpulseaudio(init('serviceName'),init('folderLog'));
+            ajax::success();
+       break;
+            
+       case 'scanbluetoothpulseaudio':
+           pulseaudio::scanbluetoothpulseaudio();
+           ajax::success();
+       break;
+            
+       case 'pairbluetoothpulseaudio':
+            pulseaudio::pairbluetoothpulseaudio(init('macAddress'));
+            ajax::success();
+       break;
+       
+        case 'soundtestpulseaudio':
+            pulseaudio::soundtestpulseaudio();
+            ajax::success();
+        break;
+            
+        case 'stopsoundtestpulseaudio':
+            pulseaudio::stopsoundtestpulseaudio(init('pid'));
+            ajax::success();
+        break;
+            
+        default init('action'):
+             throw new Exception(__('Aucune methode correspondante à : ', __FILE__) . );
+        break;
     }
-
-    if (init('action') == 'statuspulseaudio') {
-      pulseaudio::statuspulseaudio(init('serviceName'));
-        ajax::success();
-    }
-
-    if (init('action') == 'logpulseaudio') {
-      pulseaudio::logpulseaudio(init('serviceName'),init('folderLog'));
-        ajax::success();
-    }
-
-    if (init('action') == 'scanbluetoothpulseaudio') {
-      pulseaudio::scanbluetoothpulseaudio();
-        ajax::success();
-    }
-
-    if (init('action') == 'pairbluetoothpulseaudio') {
-      pulseaudio::pairbluetoothpulseaudio(init('macAddress'));
-        ajax::success();
-    }
-
-    if (init('action') == 'soundtestpulseaudio') {
-      pulseaudio::soundtestpulseaudio();
-        ajax::success();
-    }
-
-    if (init('action') == 'stopsoundtestpulseaudio') {
-      pulseaudio::stopsoundtestpulseaudio(init('pid'));
-        ajax::success();
-    }
-    throw new Exception(__('Aucune methode correspondante à : ', __FILE__) . init('action'));
+   
     /*     * *********Catch exeption*************** */
-} catch (Exception $e) {
+} catch (\Exception $e) {
     ajax::error(displayExeption($e), $e->getCode());
 }
-?>
+
+
