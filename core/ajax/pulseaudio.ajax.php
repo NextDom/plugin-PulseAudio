@@ -61,7 +61,7 @@ try {
             ajax::success();
         break;
             
-        default __FILE__ :
+        default:
              throw new Exception(__('Aucune methode correspondante à : ', __FILE__)   );
         break;
     }
