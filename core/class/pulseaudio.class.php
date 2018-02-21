@@ -204,8 +204,8 @@ class pulseaudio extends eqLogic
     {
 
         foreach ($this->getCmd() as $cmd) {
-      
-            $name    = $this->getConfiguration('name');
+
+            $name  = $this->getConfiguration('name');
             $state = exec("sudo /etc/init.d/pulseaudio-speaker-service-$name status");
 
             $cmd->event($state);
@@ -222,14 +222,14 @@ class pulseaudio extends eqLogic
 class pulseaudioCmd extends cmd
 {
     /*     * *********************Methode d'instance************************* */
-
+    /**
+    * @abstract voir si l'argument $_option est nécéssaire
+    */
     public function execute($_options = null)
     {
-        $name    = $this->getConfiguration('name');
-
+        $name = $this->getConfiguration('name');
         $state = exec("/etc/init.d/pulseaudio-speaker-service-$name status");
 
-        $cmd->event($state);
         if (is_object($state)) {
             return $state;
         } else {
