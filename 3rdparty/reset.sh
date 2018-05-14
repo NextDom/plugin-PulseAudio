@@ -1,17 +1,20 @@
 #!/bin/bash
+if [[ $EUID -ne 0 ]]; then
+  sudo_prefix=sudo;
+fi
 echo "########### Reset ##########"
 echo Arrêt des services en cours :
 echo `ls /etc/init.d/pulseaudio-speaker-service-*`
-echo `sudo service pulseaudio-speaker-service-* stop`
-echo `sudo service pulseaudio-speaker-service-* status`
+echo `$sudo_prefix service pulseaudio-speaker-service-* stop`
+echo `$sudo_prefix service pulseaudio-speaker-service-* status`
 
 # echo PPID supprimés :
 # echo `ps -afe | grep avconv | awk '{print $3}'`
-# sudo kill -9 `ps -afe | grep avconv | grep rtsp | awk '{print $3}'`
+# $sudo_prefix kill -9 `ps -afe | grep avconv | grep rtsp | awk '{print $3}'`
 #
 # echo PID supprimés :
 # echo `ps aux | grep avconv | awk '{print $2}'`
-# sudo kill -9 `ps aux | grep avconv | grep rtsp | awk '{print $2}'`
+# $sudo_prefix kill -9 `ps aux | grep avconv | grep rtsp | awk '{print $2}'`
 #
 echo Pensez à activer à nouveau vos services
 echo en sauvegardant les configurations que vous souhaitez relancer parmi :
