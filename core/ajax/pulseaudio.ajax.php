@@ -26,38 +26,38 @@ try {
     
     switch(init('action')){
     
-        case 'updatepulseaudio':
-            pulseaudio::updatepulseaudio();
+        case 'updatePulseAudio':
+            PulseAudio::updatePulseAudio();
             ajax::success();
        break;
        
-        case 'statuspulseaudio':
-            pulseaudio::statuspulseaudio(init('serviceName'));
+        case 'statusPulseAudio':
+            PulseAudio::statusPulseAudio(init('serviceName'));
             ajax::success();
        break;
        
-       case 'logpulseaudio':
-            pulseaudio::logpulseaudio(init('serviceName'),init('folderLog'));
+       case 'logPulseAudio':
+            PulseAudio::logPulseAudio(init('serviceName'),init('folderLog'));
             ajax::success();
        break;
             
-       case 'scanbluetoothpulseaudio':
-           pulseaudio::scanbluetoothpulseaudio();
+       case 'scanbluetoothPulseAudio':
+           PulseAudio::scanbluetoothPulseAudio();
            ajax::success();
        break;
             
-       case 'pairbluetoothpulseaudio':
-            pulseaudio::pairbluetoothpulseaudio(init('macAddress'));
+       case 'pairbluetoothPulseAudio':
+            PulseAudio::pairbluetoothPulseAudio(init('macAddress'));
             ajax::success();
        break;
        
-        case 'soundtestpulseaudio':
-            pulseaudio::soundtestpulseaudio();
+        case 'soundtestPulseAudio':
+            PulseAudio::soundtestPulseAudio();
             ajax::success();
         break;
             
-        case 'stopsoundtestpulseaudio':
-            pulseaudio::stopsoundtestpulseaudio(init('pid'));
+        case 'stopsoundtestPulseAudio':
+            PulseAudio::stopsoundtestPulseAudio(init('pid'));
             ajax::success();
         break;
             

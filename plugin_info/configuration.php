@@ -35,11 +35,11 @@ if (!isConnect()) {
       <div class="form-group">
         <label class="col-sm-2 control-label">{{Configuration :}}</label>
         <div class="col-lg-4">
-          <a class="btn btn-info" href=/index.php?v=d&m=pulseaudio&p=pulseaudio> {{Accès à la configuration}}</a>
+          <a class="btn btn-info" href=/index.php?v=d&m=PulseAudio&p=PulseAudio> {{Accès à la configuration}}</a>
         </div>
         <!-- <label class="col-sm-2 control-label">{{Réparer :}}</label>
   			<div class="col-sm-4">
-  				<a class="btn btn-danger" id="bt_resetpulseaudio"><i class="fa fa-check"></i> {{Forcer l'arrêt de tous les services pulseaudio}}</a>
+  				<a class="btn btn-danger" id="bt_resetPulseAudio"><i class="fa fa-check"></i> {{Forcer l'arrêt de tous les services PulseAudio}}</a>
   			</div> -->
       </div>
       <div class="form-group">
@@ -62,6 +62,6 @@ if (!isConnect()) {
               Service PulseAudio via PaWebControl
           </h4>
       </div>
-      <iframe frameborder="0" height="90%" width="100%" src="plugins/pulseaudio/PaWebControl/index.html"/>
+      <iframe frameborder="0" height="90%" width="100%" src="plugins/PulseAudio/PaWebControl/index.html"/>
   </div>
 </form>
