@@ -1,4 +1,7 @@
 #!/bin/bash
+if [[ $EUID -ne 0 ]]; then
+  sudo_prefix=sudo;
+fi
 touch /tmp/pulseaudio_dep
 echo 0 > /tmp/pulseaudio_dep
 echo "############################################################################"
@@ -8,21 +11,21 @@ echo "##########################################################################
 echo "# Update repository packages and install dependencies"
 echo "############################################################################"
 if ! grep -q "contrib non-free" /etc/apt/sources.list; then
-  sudo cp /etc/apt/sources.list /etc/apt/sources.list_backup_pulseaudio
-  sudo sed -i.bak "s| jessie main| jessie main contrib non-free|g" /etc/apt/sources.list
-  sudo sed -i.bak "s| jessie-updates main| jessie-updates main contrib non-free|g" /etc/apt/sources.list
+  $sudo_prefix cp /etc/apt/sources.list /etc/apt/sources.list_backup_pulseaudio
+  $sudo_prefix sed -i.bak "s| jessie main| jessie main contrib non-free|g" /etc/apt/sources.list
+  $sudo_prefix sed -i.bak "s| jessie-updates main| jessie-updates main contrib non-free|g" /etc/apt/sources.list
 fi
 echo 5 > /tmp/pulseaudio_dep
-sudo apt-get -y update
+$sudo_prefix apt-get -y update
 echo 10 > /tmp/pulseaudio_dep
 
 if grep -q "Raspbian" /etc/os-release; then
-  sudo apt-get -y install pi-bluetooth blueman
+  $sudo_prefix apt-get -y install pi-bluetooth blueman
 fi
 
-sudo apt-get -y install pulseaudio pulseaudio-module-bluetooth pulseaudio-module-zeroconf avahi-daemon dbus-x11 bluez bluez-firmware expect lsb-release mplayer
+$sudo_prefix apt-get -y install pulseaudio pulseaudio-module-bluetooth pulseaudio-module-zeroconf avahi-daemon dbus-x11 bluez bluez-firmware expect lsb-release mplayer
 if [ -f /etc/apt/sources.list_backup_pulseaudio ]; then
-  sudo mv /etc/apt/sources.list_backup_pulseaudio /etc/apt/sources.list
+  $sudo_prefix mv /etc/apt/sources.list_backup_pulseaudio /etc/apt/sources.list
 fi
 
 echo 60 > /tmp/pulseaudio_dep
@@ -30,11 +33,11 @@ echo 60 > /tmp/pulseaudio_dep
 echo "############################################################################"
 echo "# Add root and jeedom users to pulse-access group"
 echo "############################################################################"
-sudo adduser root pulse-access
-sudo adduser jeedom pulse-access
-sudo adduser www-data pulse-access
+$sudo_prefix adduser root pulse-access
+$sudo_prefix adduser jeedom pulse-access
+$sudo_prefix adduser www-data pulse-access
 if grep -q "Raspbian" /etc/os-release; then
-  sudo adduser pi pulse-access
+  $sudo_prefix adduser pi pulse-access
 fi
 
 echo 70 > /tmp/pulseaudio_dep
@@ -42,7 +45,7 @@ echo 70 > /tmp/pulseaudio_dep
 echo "############################################################################"
 echo "# Authorize PulseAudio - which will run as user pulse - to use BlueZ D-BUS interface:"
 echo "############################################################################"
-sudo bash -c "cat <<EOF > /etc/dbus-1/system.d/pulseaudio-bluetooth.conf
+$sudo_prefix bash -c "cat <<EOF > /etc/dbus-1/system.d/pulseaudio-bluetooth.conf
 <busconfig>
 
   <policy user=\"pulse\">
@@ -67,14 +70,14 @@ sudo bash -c "cat <<EOF > /etc/dbus-1/system.d/pulseaudio-bluetooth.conf
 
 </busconfig>
 EOF"
-sudo chmod go+w /etc/dbus-1/system.d/pulseaudio-bluetooth.conf
+$sudo_prefix chmod go+w /etc/dbus-1/system.d/pulseaudio-bluetooth.conf
 echo 80 > /tmp/pulseaudio_dep
 
 echo "############################################################################"
 echo "# Load Bluetooth discover module in SYSTEM MODE:"
 echo "############################################################################"
 if ! grep -q "load-module module-bluetooth-discover" /etc/pulse/system.pa; then
-	sudo bash -c "cat <<EOF >> /etc/pulse/system.pa
+	$sudo_prefix bash -c "cat <<EOF >> /etc/pulse/system.pa
 
 ########################
 ### Bluetooth Support ##
@@ -84,13 +87,13 @@ load-module module-bluetooth-discover
 .endif
 EOF"
 fi
-sudo chmod go+w /etc/pulse/system.pa
+$sudo_prefix chmod go+w /etc/pulse/system.pa
 
 echo "############################################################################"
 echo "# Load Network module in SYSTEM MODE:"
 echo "############################################################################"
 if ! grep -q "module-native-protocol-tcp" /etc/pulse/system.pa; then
-	sudo bash -c "cat <<EOF >> /etc/pulse/system.pa
+	$sudo_prefix bash -c "cat <<EOF >> /etc/pulse/system.pa
 
 #######################
 ### Network Support ###
@@ -105,7 +108,7 @@ echo "##########################################################################
 echo "# Load Simultaneous module in SYSTEM MODE:"
 echo "############################################################################"
 if ! grep -q "module-combine-sink" /etc/pulse/system.pa; then
-	sudo bash -c "cat <<EOF >> /etc/pulse/system.pa
+	$sudo_prefix bash -c "cat <<EOF >> /etc/pulse/system.pa
 
 ############################
 ### Simultaneous Support ###
@@ -120,60 +123,60 @@ echo 85 > /tmp/pulseaudio_dep
 echo "############################################################################"
 echo "# Restart Bluetooth and check its status"
 echo "############################################################################"
-sudo systemctl enable bluetooth
-sudo systemctl restart bluetooth
+$sudo_prefix systemctl enable bluetooth
+$sudo_prefix systemctl restart bluetooth
 echo 90 > /tmp/pulseaudio_dep
 
 echo "############################################################################"
 echo "# Create a systemd service for running pulseaudio in System Mode as user 'pulse'."
 echo "############################################################################"
 
-sudo cp -Rf $(dirname "$0")/pulseaudio.service /etc/systemd/system/pulseaudio.service
-sudo chmod go+wx $(dirname "$0")/pulseaudio.service
+$sudo_prefix cp -Rf $(dirname "$0")/pulseaudio.service /etc/systemd/system/pulseaudio.service
+$sudo_prefix chmod go+wx $(dirname "$0")/pulseaudio.service
 echo 95 > /tmp/pulseaudio_dep
 
 echo "############################################################################"
 echo "# Restart Bluetooth and check its status"
 echo "############################################################################"
-sudo systemctl daemon-reload
-sudo systemctl enable pulseaudio.service
-sudo systemctl start pulseaudio.service
+$sudo_prefix systemctl daemon-reload
+$sudo_prefix systemctl enable pulseaudio.service
+$sudo_prefix systemctl start pulseaudio.service
 echo 98 > /tmp/pulseaudio_dep
 
 echo "############################################################################"
 echo "# Linking scripts"
 echo "############################################################################"
 if [ ! -f /usr/sbin/bluetooth-connect.sh ]; then
-    sudo ln -s $(dirname "$0")/bluetooth-connect.sh /usr/sbin/bluetooth-connect.sh
+    $sudo_prefix ln -s $(dirname "$0")/bluetooth-connect.sh /usr/sbin/bluetooth-connect.sh
 fi
 if [ ! -f /usr/sbin/bluetooth-disconnect.sh ]; then
-	sudo ln -s $(dirname "$0")/bluetooth-disconnect.sh /usr/sbin/bluetooth-disconnect.sh
+	$sudo_prefix ln -s $(dirname "$0")/bluetooth-disconnect.sh /usr/sbin/bluetooth-disconnect.sh
 fi
 if [ ! -f /usr/sbin/bluetooth-pair-trust.sh ]; then
-	sudo ln -s $(dirname "$0")/bluetooth-pair-trust.sh /usr/sbin/bluetooth-pair-trust.sh
+	$sudo_prefix ln -s $(dirname "$0")/bluetooth-pair-trust.sh /usr/sbin/bluetooth-pair-trust.sh
 fi
 if [ ! -f /usr/sbin/bluetooth-unpair-untrust.sh ]; then
-	sudo ln -s $(dirname "$0")/bluetooth-unpair-untrust.sh /usr/sbin/bluetooth-unpair-untrust.sh
+	$sudo_prefix ln -s $(dirname "$0")/bluetooth-unpair-untrust.sh /usr/sbin/bluetooth-unpair-untrust.sh
 fi
 
-sudo chmod +x $(dirname "$0")/bluetooth-connect.sh
-sudo chmod +x $(dirname "$0")/bluetooth-disconnect.sh
-sudo chmod +x $(dirname "$0")/bluetooth-pair-trust.sh
-sudo chmod +x $(dirname "$0")/bluetooth-unpair-untrust.sh
-sudo chmod +x $(dirname "$0")/bluetooth-scan.sh
+$sudo_prefix chmod +x $(dirname "$0")/bluetooth-connect.sh
+$sudo_prefix chmod +x $(dirname "$0")/bluetooth-disconnect.sh
+$sudo_prefix chmod +x $(dirname "$0")/bluetooth-pair-trust.sh
+$sudo_prefix chmod +x $(dirname "$0")/bluetooth-unpair-untrust.sh
+$sudo_prefix chmod +x $(dirname "$0")/bluetooth-scan.sh
 
 
 echo "############################################################################"
 echo "# Installation Information"
 echo "############################################################################"
-sudo cat /etc/os-release
-sudo bluetoothctl --version
+$sudo_prefix cat /etc/os-release
+$sudo_prefix bluetoothctl --version
 
 echo "############################################################################"
 echo "# Services Information"
 echo "############################################################################"
-sudo systemctl status bluetooth
-sudo systemctl status pulseaudio.service
+$sudo_prefix systemctl status bluetooth
+$sudo_prefix systemctl status pulseaudio.service
 
 
 

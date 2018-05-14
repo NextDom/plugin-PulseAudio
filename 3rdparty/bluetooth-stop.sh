@@ -1,4 +1,7 @@
 #!/bin/bash
+if [[ $EUID -ne 0 ]]; then
+  sudo_prefix=sudo;
+fi
 echo "########### Arrêt du service ##########"
-sudo systemctl stop bluetooth.service
+$sudo_prefix systemctl stop bluetooth.service
 echo "########### Fin ##########"

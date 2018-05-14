@@ -1,4 +1,7 @@
 #!/bin/bash
+if [[ $EUID -ne 0 ]]; then
+  sudo_prefix=sudo;
+fi
 cd "$(dirname "$0")"
 
 echo "############################################################################"
@@ -8,15 +11,15 @@ if [ -f /etc/init.d/pulseaudio-speaker-service-$1 ]; then
     echo "############################################################################"
     echo "# Disconnect bluetooth this device"
     echo "############################################################################"
-    sudo service pulseaudio-speaker-service-$1 stop
-    sudo update-rc.d pulseaudio-speaker-service-$1 remove
-    sudo systemctl daemon-reload
-    sudo rm -Rf /etc/init.d/pulseaudio-speaker-service-$1
+    $sudo_prefix service pulseaudio-speaker-service-$1 stop
+    $sudo_prefix update-rc.d pulseaudio-speaker-service-$1 remove
+    $sudo_prefix systemctl daemon-reload
+    $sudo_prefix rm -Rf /etc/init.d/pulseaudio-speaker-service-$1
 
     echo "############################################################################"
     echo "# Remove/Untrust bluetooth this device"
     echo "############################################################################"
-    sudo expect /usr/sbin/bluetooth-unpair-untrust.sh $2 $3
+    $sudo_prefix expect /usr/sbin/bluetooth-unpair-untrust.sh $2 $3
     #sleep 5
 fi
 echo "############################################################################"
