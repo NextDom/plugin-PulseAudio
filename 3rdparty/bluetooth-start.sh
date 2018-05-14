@@ -1,4 +1,7 @@
 #!/bin/bash
+if [[ $EUID -ne 0 ]]; then
+  sudo_prefix=sudo;
+fi
 echo "########### Lancement du service ##########"
-sudo systemctl start bluetooth.service
+$sudo_prefix systemctl start bluetooth.service
 echo "########### Fin ##########"
