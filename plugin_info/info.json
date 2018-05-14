@@ -1,7 +1,7 @@
 {
-"id" : "pulseaudio",
-"name" : "Pulseaudio",
-"licence" : "AGPL",
+"id" : "PulseAudio",
+"name" : "PulseAudio",
+"licence" : "GPL",
 "author" : "Slobberbone",
 "require" : "2.2.5",
 "category" : "multimedia",

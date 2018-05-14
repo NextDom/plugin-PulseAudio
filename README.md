@@ -1,1 +1,1 @@
-# plugin-pulseaudio
+# plugin-PulseAudio
