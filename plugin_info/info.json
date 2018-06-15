@@ -2,7 +2,7 @@
 "id" : "PulseAudio",
 "name" : "PulseAudio",
 "licence" : "GPL",
-"author" : "Slobberbone",
+"author" : "NextDom (Slobberbone)",
 "require" : "2.2.5",
 "category" : "multimedia",
 "hasDependency" : true,
