@@ -95,7 +95,7 @@ class PulseAudio extends eqLogic
   {
     $sudo_prefix = self::usingSudo();
     log::remove('PulseAudio_status-' . $serviceName);
-    $cmd = $sudo_prefix . 'systemctl -l status PulseAudio-speaker-service-' . $serviceName . '.service';
+    $cmd = $sudo_prefix . 'systemctl -l status pulseaudio-speaker-service-' . $serviceName . '.service';
     $cmd .= ' >> ' . log::getPathToLog('PulseAudio_status-' . $serviceName) . ' 2>&1 &';
     exec($cmd);
   }
@@ -126,10 +126,10 @@ class PulseAudio extends eqLogic
   {
     $sudo_prefix = self::usingSudo();
     log::remove('PulseAudio_soundtest');
-    $cmd = $sudo_prefix . 'kill -9 `cat ' . dirname(__FILE__) . '/../../PulseAudio_soundtest.pid`';
-    $cmd .= '; echo `cat ' . dirname(__FILE__) . '/../../PulseAudio_soundtest.pid` killed >> ' . log::getPathToLog('PulseAudio_soundtest') . ' 2>&1 &';
+    $cmd = $sudo_prefix . 'kill -9 `cat ' . dirname(__FILE__) . '/../../pulseaudio_soundtest.pid`';
+    $cmd .= '; echo `cat ' . dirname(__FILE__) . '/../../pulseaudio_soundtest.pid` killed >> ' . log::getPathToLog('PulseAudio_soundtest') . ' 2>&1 &';
     exec($cmd);
-    $cmd = 'rm ' . dirname(__FILE__) . '/../../PulseAudio_soundtest.pid';
+    $cmd = 'rm ' . dirname(__FILE__) . '/../../pulseaudio_soundtest.pid';
     exec($cmd);
   }
 
@@ -188,12 +188,12 @@ class PulseAudio extends eqLogic
       exec($cmd);
     }
     if ($this->getIsEnable()) {
-      $cmd = $sudo_prefix . ' /etc/init.d/PulseAudio-speaker-service-' . $this->getConfiguration('name') . ' start ';
+      $cmd = $sudo_prefix . ' /etc/init.d/pulseaudio-speaker-service-' . $this->getConfiguration('name') . ' start ';
       $cmd .= ' >> ' . log::getPathToLog('PulseAudio_connect') . ' 2>&1 &';
       exec('echo Connecting : ' . $this->getConfiguration('name') . ' Address : ' . $this->getConfiguration('address') . ' >> ' . log::getPathToLog('PulseAudio_connect') . ' 2>&1 &');
       exec($cmd);
     } else {
-      $cmd = $sudo_prefix . '/etc/init.d/PulseAudio-speaker-service-' . $this->getConfiguration('name') . ' stop ';
+      $cmd = $sudo_prefix . '/etc/init.d/pulseaudio-speaker-service-' . $this->getConfiguration('name') . ' stop ';
       $cmd .= ' >> ' . log::getPathToLog('PulseAudio_disconnect') . ' 2>&1 &';
       exec('echo Disconnecting : ' . $this->getConfiguration('name') . ' Address : ' . $this->getConfiguration('address') . ' >> ' . log::getPathToLog('PulseAudio_disconnect') . ' 2>&1 &');
       exec($cmd);
@@ -219,7 +219,7 @@ class PulseAudio extends eqLogic
     foreach ($this->getCmd() as $cmd) {
 
       $name    = $this->getConfiguration('name');
-      $state = exec($sudo_prefix . "/etc/init.d/PulseAudio-speaker-service-$name status");
+      $state = exec($sudo_prefix . "/etc/init.d/pulseaudio-speaker-service-$name status");
 
       $cmd->event($state);
     }
@@ -241,7 +241,7 @@ class PulseAudioCmd extends cmd
     $name    = $this->getConfiguration('name');
 
     $sudo_prefix = self::usingSudo();
-    $state = exec($sudo_prefix . "/etc/init.d/PulseAudio-speaker-service-$name status");
+    $state = exec($sudo_prefix . "/etc/init.d/pulseaudio-speaker-service-$name status");
 
     $cmd->event($state);
     if (is_object($state)) {
