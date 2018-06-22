@@ -2,8 +2,8 @@
 <html lang="pt-br">
 <head>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/styles.css">
-    <link rel="stylesheet" href="../assets/css/materialize.css">
+    <link rel="stylesheet" href="https://github.com/NextDom/NextDom.github.io/tree/master/assets/css/styles.css">
+    <link rel="stylesheet" href="https://github.com/NextDom/NextDom.github.io/tree/master/assets/css/materialize.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="Content-Language" content="pt-br">
 
@@ -21,52 +21,52 @@
     <link type="text/css" rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css"
           media="screen,projection"/>
-    <link href="../css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="https://github.com/NextDom/NextDom.github.io/tree/master/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.2.min.js"></script>
     <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
     <script type="text/javascript">
-    function includeHTML() {
-        var z, i, elmnt, file, xhttp;
-        /*loop through a collection of all HTML elements:*/
-        z = document.getElementsByTagName("*");
-        for (i = 0; i < z.length; i++) {
-            elmnt = z[i];
-            /*search for elements with a certain atrribute:*/
-            file = elmnt.getAttribute("w3-include-html");
-            if (file) {
-                /*make an HTTP request using the attribute value as the file name:*/
-                xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function () {
-                    if (this.readyState == 4) {
-                        if (this.status == 200) {
-                            elmnt.innerHTML = this.responseText;
+        function includeHTML() {
+            var z, i, elmnt, file, xhttp;
+            /*loop through a collection of all HTML elements:*/
+            z = document.getElementsByTagName("*");
+            for (i = 0; i < z.length; i++) {
+                elmnt = z[i];
+                /*search for elements with a certain atrribute:*/
+                file = elmnt.getAttribute("w3-include-html");
+                if (file) {
+                    /*make an HTTP request using the attribute value as the file name:*/
+                    xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4) {
+                            if (this.status == 200) {
+                                elmnt.innerHTML = this.responseText;
+                            }
+                            if (this.status == 404) {
+                                elmnt.innerHTML = "Page not found.";
+                            }
+                            /*remove the attribute, and call this function once more:*/
+                            elmnt.removeAttribute("w3-include-html");
+                            includeHTML();
                         }
-                        if (this.status == 404) {
-                            elmnt.innerHTML = "Page not found.";
-                        }
-                        /*remove the attribute, and call this function once more:*/
-                        elmnt.removeAttribute("w3-include-html");
-                        includeHTML();
                     }
+                    xhttp.open("GET", file, true);
+                    xhttp.send();
+                    /*exit the function:*/
+                    return;
                 }
-                xhttp.open("GET", file, true);
-                xhttp.send();
-                /*exit the function:*/
-                return;
             }
-        }
-    };
+        };
     </script>
-    <script type="text/javascript" src="../assets/js/materialize.min.js"></script>
-    <script type="text/javascript" src="../assets/js/jquery.inview.min.js"></script>
-    <script type="text/javascript" src="../assets/js/jquery.toc.js"></script>
+    <script type="text/javascript" src="https://github.com/NextDom/NextDom.github.io/tree/master/assets/js/materialize.min.js"></script>
+    <script type="text/javascript" src="https://github.com/NextDom/NextDom.github.io/tree/master/assets/js/jquery.inview.min.js"></script>
+    <script type="text/javascript" src="https://github.com/NextDom/NextDom.github.io/tree/master/assets/js/jquery.toc.js"></script>
 </head>
 
 <body>
-<div w3-include-html="header.html"></div>
+<div w3-include-html="https://github.com/NextDom/NextDom.github.io/tree/master/header.html"></div>
 <div class="row" id="div_main">
     <div id="side-nav" class="side-nav fixed">
         <div class="container">
@@ -202,6 +202,6 @@
     });
 </script>
 
-<div w3-include-html="footer.html"></div>
+<div w3-include-html="https://github.com/NextDom/NextDom.github.io/tree/master/footer.html"></div>
 </body>
 </html>
