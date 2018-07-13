@@ -69,7 +69,9 @@
 <body>
 
 <div w3-include-html="https://nextdom.github.io/header.html"></div>
-<div w3-include-html="https://nextdom.github.io/doc-content.html"></div>
+{% include "https://nextdom.github.io/header.html" %}
+
+{% include "https://nextdom.github.io/doc-content.html" %}
 <div w3-include-html="https://nextdom.github.io/footer.html"></div>
 
 <script type="text/javascript">
